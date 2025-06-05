@@ -174,6 +174,7 @@ def create_app():  # noqa: C901
                 path="/ui",
                 allowed_paths=["./logo.png", tmp_output_dir],
                 root_path="/ui",
+                mcp_server=docling_serve_settings.enable_mcp_server,
             )
         except ImportError:
             _log.warning(
