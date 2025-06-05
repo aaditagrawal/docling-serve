@@ -1,4 +1,5 @@
 import sys
+import os
 from pathlib import Path
 from typing import Optional, Union
 
@@ -35,6 +36,7 @@ class DoclingServeSettings(BaseSettings):
     )
 
     enable_ui: bool = False
+    enable_mcp_server: bool = True
     api_host: str = "localhost"
     artifacts_path: Optional[Path] = None
     static_path: Optional[Path] = None
@@ -80,6 +82,12 @@ class DoclingServeSettings(BaseSettings):
                 raise ValueError(
                     "KFP is not yet working. To enable the development version, you must set DOCLING_SERVE_ENG_KFP_EXPERIMENTAL=true."
                 )
+
+        # Handle MCP server setting, checking environment variable as fallback
+        if not self.enable_mcp_server:
+            gradio_mcp_env = os.environ.get("GRADIO_MCP_SERVER", "").lower()
+            if gradio_mcp_env in ("true", "1", "yes", "on"):
+                self.enable_mcp_server = True
 
         return self
 
